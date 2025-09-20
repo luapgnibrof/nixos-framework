@@ -1,4 +1,4 @@
-# NixOS Framework — Push-Button Installer (Option 1)
+# NixOS Framework — Push-Button Installer
 
 This repo installs NixOS on a Framework laptop with:
 - Full-disk LUKS
@@ -15,5 +15,5 @@ This repo installs NixOS on a Framework laptop with:
 2) Install git on the live ISO if needed, then clone:
 ```bash
 nix-shell -p git || nix shell nixpkgs#git
-git clone https://github.com/<you>/nixos-framework.git
+git clone https://github.com/luapgnibrof/nixos-framework.git
 cd nixos-framework
