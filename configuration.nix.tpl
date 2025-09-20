@@ -87,6 +87,13 @@
   # OpenSSH (optional remote access)
   services.openssh.enable = false;  # set to true if you want SSH server
 
+  # Steam (handles 32-bit libs & workarounds)
+  programs.steam.enable = true;  # installs Steam system-wide
+  # Docs: search.nixos.org option "programs.steam.enable"
+
+  # KDE Connect (opens TCP/UDP 1714–1764 automatically)
+  programs.kdeconnect.enable = true;
+
   # ---------- Users ----------
   users.users."__USERNAME__" = {
     isNormalUser = true;
