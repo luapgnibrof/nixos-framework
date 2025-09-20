@@ -1,30 +1,53 @@
 { config, pkgs, lib, ... }:
 
 {
-  # Home Manager as a NixOS module: bind config to your user
   home-manager.users.__USERNAME__ = {
     home.stateVersion = "24.11";
 
-    # --------- Packages (user scope) ---------
+    # ------------ Apps you asked for ------------
     home.packages = with pkgs; [
-      # KDE desktop apps
-      konsole dolphin kate okular gwenview spectacle ark
+      # Office & comms
+      libreoffice-qt6-fresh
+      thunderbird
+      bitwarden bitwarden-cli
+      element-desktop
+      signal-desktop
+      whatsapp-for-linux      # alt: zapzap
+      kdeconnect-kde
 
-      # Browsing / media
-      firefox vlc
+      # Browsers / editors
+      firefox
+      chromium
+      vscode                  # unfree
+      microsoft-edge          # unfree
 
-      # Dev / ops toolbelt
-      gh ripgrep fd bat jq yq tree fzf eza
-      kubectl k9s helm
-      awscli2 azure-cli
-      sops age
-      opentofu # switch to terraform if you prefer
-      ansible
-      # Handy utilities
-      ncdu duf
+      # Media / creative
+      vlc
+      audacity
+      darktable
+
+      # Utilities
+      p7zip                   # 7-Zip CLI (7z); prefer this over legacy forks
+      powershell
+
+      # Remote / chat
+      rustdesk
+      slack                   # unfree
+      teams-for-linux
+
+      # Meetings
+      jitsi-meet-electron
+
+      # Gaming / Windows compatibility
+      bottles                 # works, but upstream prefers Flatpak
+
+      # API tools
+      postman                 # unfree; occasionally breaks upstream
+
+      # (Steam handled system-wide; see below)
     ];
 
-    # --------- Shell, prompt, and tooling ---------
+    # ------------ Your previous nice defaults ------------
     programs.zsh = {
       enable = true;
       autosuggestions.enable = true;
@@ -34,79 +57,10 @@
         ll = "eza -lah";
         k = "kubectl";
         g = "git";
-        tf = "tofu"; # opentofu alias
+        tf = "tofu";
       };
     };
 
     programs.starship.enable = true;
 
     programs.direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
-
-    programs.kitty = {
-      enable = true;
-      settings = {
-        confirm_os_window_close = 0;
-        enable_audio_bell = "no";
-      };
-    };
-
-    programs.vscode = {
-      enable = true;
-      userSettings = {
-        "editor.fontFamily" = "JetBrains Mono, monospace";
-        "editor.fontLigatures" = true;
-        "editor.formatOnSave" = true;
-        "files.trimTrailingWhitespace" = true;
-        "terminal.integrated.defaultProfile.linux" = "zsh";
-      };
-      extensions = with pkgs.vscode-extensions; [
-        ms-python.python
-        ms-vscode.cpptools
-        ms-azuretools.vscode-docker
-        github.vscode-github-actions
-        redhat.vscode-yaml
-        hashicorp.terraform
-      ];
-    };
-
-    programs.git = {
-      enable = true;
-      userName = "__USERNAME__";
-      userEmail = "you@example.com"; # update after first boot
-      extraConfig = {
-        init.defaultBranch = "main";
-        pull.rebase = true;
-        push.autoSetupRemote = true;
-        core.editor = "vim";
-      };
-    };
-
-    programs.ssh = {
-      enable = true;
-      extraConfig = ''
-        AddKeysToAgent yes
-        ServerAliveInterval 60
-      '';
-    };
-
-    services.gpg-agent = {
-      enable = true;
-      enableSshSupport = true;
-      defaultCacheTtl = 7200;
-      maxCacheTtl = 86400;
-    };
-
-    # --------- XDG & session defaults ---------
-    xdg.enable = true;
-    xdg.userDirs.enable = true;
-
-    home.sessionVariables = {
-      EDITOR = "vim";
-      VISUAL = "code";
-      PAGER = "bat";
-    };
-  };
-}
