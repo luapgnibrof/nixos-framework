@@ -1,66 +1,16 @@
+sudo tee /mnt/etc/nixos/home-manager.nix > /dev/null <<'NIX'
 { config, pkgs, lib, ... }:
-
 {
-  home-manager.users.__USERNAME__ = {
+  home-manager.users.paul = {
     home.stateVersion = "24.11";
 
-    # ------------ Apps you asked for ------------
+    # keep it tiny for install; we’ll expand post-boot
     home.packages = with pkgs; [
-      # Office & comms
-      libreoffice-qt6-fresh
-      thunderbird
-      bitwarden bitwarden-cli
-      element-desktop
-      signal-desktop
-      whatsapp-for-linux      # alt: zapzap
-      kdeconnect-kde
-
-      # Browsers / editors
       firefox
-      chromium
-      vscode                  # unfree
-      microsoft-edge          # unfree
-
-      # Media / creative
       vlc
-      audacity
-      darktable
-
-      # Utilities
-      p7zip                   # 7-Zip CLI (7z); prefer this over legacy forks
-      powershell
-
-      # Remote / chat
-      rustdesk
-      slack                   # unfree
-      teams-for-linux
-
-      # Meetings
-      jitsi-meet-electron
-
-      # Gaming / Windows compatibility
-      bottles                 # works, but upstream prefers Flatpak
-
-      # API tools
-      postman                 # unfree; occasionally breaks upstream
-
-      # (Steam handled system-wide; see below)
     ];
 
-    # ------------ Your previous nice defaults ------------
-    programs.zsh = {
-      enable = true;
-      autosuggestions.enable = true;
-      syntaxHighlighting.enable = true;
-      history.size = 50000;
-      shellAliases = {
-        ll = "eza -lah";
-        k = "kubectl";
-        g = "git";
-        tf = "tofu";
-      };
-    };
-
-    programs.starship.enable = true;
-
-    programs.direnv = {
+    programs.zsh.enable = true;
+  };
+}
+NIX
