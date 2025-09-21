@@ -104,8 +104,21 @@ sed \
   "$TPL" > "$CONF"
 
 # --- home-manager file (optional but handy) ---
-echo ">>> Installing home-manager.nix"
-cp "$(dirname "$0")/home-manager.nix" /mnt/etc/nixos/home-manager.nix
+echo ">>> Installing home-manager.nix (templated)"
+sed -e "s|__USERNAME__|$USERNAME|g" \
+  "$(dirname "$0")/home-manager.nix" > /mnt/etc/nixos/home-manager.nix
+
+# sanity check: bail if placeholder survived
+if grep -q "__USERNAME__" /mnt/etc/nixos/home-manager.nix; then
+  echo "Templating error: __USERNAME__ still present in home-manager.nix"
+  exit 1
+fi
+
+# quick syntax check (parsing only; no eval)
+if ! nix-instantiate --parse /mnt/etc/nixos/home-manager.nix >/dev/null 2>&1; then
+  echo "Syntax error in home-manager.nix"
+  exit 1
+fi
 
 # --- install ---
 echo ">>> Installing NixOS (this may take a while)"
